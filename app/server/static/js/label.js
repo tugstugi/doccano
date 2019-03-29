@@ -16,6 +16,7 @@ const vm = new Vue({
     shortcutKey: '',
     backgroundColor: '#209cee',
     textColor: '#ffffff',
+    editedLabel: null,
     messages: [],
   },
 
@@ -83,6 +84,33 @@ const vm = new Vue({
       this.shortcutKey = '';
       this.backgroundColor = '#209cee';
       this.textColor = '#ffffff';
+    },
+
+    editLabel(label) {
+      this.beforeEditCache = label.text;
+      this.editedLabel = label;
+    },
+
+    doneEdit(label) {
+      console.log(this.editedLabel);
+      if (!this.editedLabel) {
+        return;
+      }
+      this.editedLabel = null;
+      label.text = label.text.trim();
+      if (!label.text) {
+        this.removeLabel(label);
+      }
+      console.log(label);
+      console.log(this.editedLabel);
+      HTTP.patch(`labels/${label.id}`, label).then((response) => {
+        console.log(response);
+      });
+    },
+
+    cancelEdit(label) {
+      this.editedLabel = null;
+      label.text = this.beforeEditCache;
     },
   },
   created() {
