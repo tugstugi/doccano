@@ -125,6 +125,14 @@ const annotationMixin = {
       shortcut = shortcut.split(' ');
       return shortcut;
     },
+
+    deleteDoc() {
+      const docId = this.docs[this.pageNumber].id;
+      HTTP.delete(`docs/${docId}`).then((response) => {
+        this.docs.splice(this.pageNumber, 1);
+        this.annotations.splice(this.pageNumber, 1);
+      });
+    },
   },
 
   watch: {

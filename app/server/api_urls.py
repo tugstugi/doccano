@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from .api import ProjectList, ProjectDetail
+from .api import ProjectList, ProjectDetail, DeleteDocument
 from .api import LabelList, LabelDetail
 from .api import DocumentList, DocumentDetail
 from .api import AnnotationList, AnnotationDetail
@@ -29,7 +29,9 @@ urlpatterns = [
     path('projects/<int:project_id>/docs/upload',
          TextUploadAPI.as_view(), name='doc_uploader'),
     path('projects/<int:project_id>/docs/download',
-         TextDownloadAPI.as_view(), name='doc_downloader')
+         TextDownloadAPI.as_view(), name='doc_downloader'),
+    path('api/projects/<int:project_id>/docs/<int:doc_id>',
+         DeleteDocument.as_view(), name='delete-document'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'xml'])

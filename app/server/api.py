@@ -211,3 +211,15 @@ class TextDownloadAPI(APIView):
             return JSONPainter()
         else:
             raise ValidationError('format {} is invalid.'.format(format))
+
+class DeleteDocument(generics.DestroyAPIView):
+    permission_classes = (IsAuthenticated, IsProjectUser, IsAdminUser)
+
+    def get_queryset(self):
+        queryset = Document.objects.all()
+        return queryset
+
+    def get_object(self):
+        obj = get_object_or_404(Document, project_id=self.kwargs['project_id'],
+                                pk=self.kwargs['doc_id'])
+        return obj
